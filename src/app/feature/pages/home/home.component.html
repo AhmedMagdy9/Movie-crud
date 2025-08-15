@@ -1,0 +1,140 @@
+
+
+
+
+<!-- Modal -->
+@if (showModal()) {
+<div class="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+  <div class="bg-white dark:bg-gray-900 w-full md:w-4/6 rounded-2xl shadow-lg p-6 relative">
+
+    <!-- Close Button -->
+    <button (click)="toggleModal()" class="absolute cursor-pointer top-3 right-3 text-gray-400 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-200 text-xl">❌</button>
+
+    <!-- Modal Title -->
+    <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">Add New Movie</h2>
+
+    <!-- Form -->
+    <form [formGroup]="movieForm" (ngSubmit)="create()" class="space-y-4">
+
+      <!-- Movie Name -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Movie Name</label>
+        <input formControlName="name" type="text" placeholder="Enter movie name"
+          class="mt-1 block w-full rounded-lg border border-gray-300 dark:border-gray-600 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200 dark:bg-gray-800 dark:text-gray-100 outline-none">
+      </div>
+
+      <!-- Poster URL -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Poster URL</label>
+        <input formControlName="posterUrl" type="url" placeholder="Enter poster image link"
+          class="mt-1 block w-full rounded-lg border border-gray-300 dark:border-gray-600 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200 dark:bg-gray-800 dark:text-gray-100 outline-none">
+      </div>
+
+      <!-- Movie URL -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Movie URL</label>
+        <input formControlName="movieUrl" type="url" placeholder="Enter movie link"
+          class="mt-1 block w-full rounded-lg border border-gray-300 dark:border-gray-600 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200 dark:bg-gray-800 dark:text-gray-100 outline-none">
+      </div>
+
+      <!-- Genre -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Genre</label>
+        <select formControlName="type"
+          class="mt-1 block w-full rounded-lg border border-gray-300 dark:border-gray-600 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200 dark:bg-gray-800 dark:text-gray-100 outline-none">
+          <option value="">Select genre</option>
+          <option>Action</option>
+          <option>Comedy</option>
+          <option>Drama</option>
+          <option>Horror</option>
+          <option>Sci-Fi</option>
+        </select>
+      </div>
+
+      <!-- Rating -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Rating</label>
+        <input formControlName="rating" type="number" min="0" max="10" placeholder="Enter rating (0 - 10)"
+          class="mt-1 block w-full rounded-lg border border-gray-300 dark:border-gray-600 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200 dark:bg-gray-800 dark:text-gray-100 outline-none">
+      </div>
+
+      <!-- Submit -->
+      @if (!UpdBtn()) {
+      <button type="submit"
+        class="w-full cursor-pointer bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 py-2 rounded-lg hover:from-green-600 hover:to-emerald-600 transition">
+        Save Movie
+      </button>
+      }
+
+    </form>
+
+    @if (UpdBtn()) {
+    <button (click)="saveChanges()"
+      class="w-full cursor-pointer bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 py-2 my-4 rounded-lg hover:from-green-600 hover:to-emerald-600 transition">
+      Update
+    </button>
+    }
+
+  </div>
+</div>
+
+}
+
+<!--            table          -->
+
+<div class="p-6 bg-gray-50 dark:bg-gray-900 min-h-screen">
+
+  <div class="text-center my-6">
+    <h1 class="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-100">📽 مكتبة الأفلام</h1>
+    <!-- Button to Open Modal -->
+    <button (click)="toggleModal()" class="cursor-pointer bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-lg hover:from-blue-600 hover:to-indigo-600 transition">
+      Add Movie
+    </button>
+    <div class="py-4">
+      <input [(ngModel)]="searchWord" type="text" placeholder="ابحث هنا..." 
+        class="w-[90%] md:w-1/2 px-4 py-2 rounded-full border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm bg-white dark:bg-gray-800 dark:text-gray-100"/>
+    </div>
+  </div>
+
+  <div class="overflow-x-auto bg-white dark:bg-gray-800 shadow-xl rounded-2xl border border-gray-200 dark:border-gray-700">
+    <table class="min-w-full text-sm text-gray-700 dark:text-gray-200">
+      <thead class="bg-gradient-to-r from-indigo-500 to-purple-500 text-white">
+        <tr>
+          <th class="p-4 text-left">البوستر</th>
+          <th class="p-4 text-left">اسم الفيلم</th>
+          <th class="p-4 text-left">النوع</th>
+          <th class="p-4 text-left">التقييم</th>
+          <th class="p-4 text-center">الإجراءات</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- فيلم  -->
+        @for (movie of allMoviesHome(); track $index) {
+          @if (movie.name.toLocaleLowerCase().includes(searchWord().toLocaleLowerCase())) {
+            <tr class="border-t border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+              <td class="p-4">
+                <img [src]="movie.posterUrl" alt="Inception" class="w-16 h-24 object-cover rounded-lg shadow">
+              </td>
+              <td class="p-4 font-semibold text-gray-900 dark:text-gray-100">{{movie.name}}</td>
+              <td class="p-4">
+                <span class="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-3 py-1 rounded-full text-xs font-semibold">{{movie.type}}</span>
+              </td>
+              <td class="p-4">
+                <span class="bg-yellow-400 text-white px-3 py-1 rounded-full text-sm font-bold">⭐ {{movie.rating}}</span>
+              </td>
+              <td class="p-4 text-center space-x-2">
+                <div class="flex justify-center flex-col md:flex-row gap-4">
+                  <a target="_blank" [href]="movie.movieUrl" class="px-3 py-1 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transition">Visit</a>
+                  <button (click)="onEdit(movie)" class="px-3 py-1 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white rounded-lg hover:from-yellow-600 hover:to-yellow-700 transition">Update</button>
+                  <button (click)="delete(movie.id)" class="px-3 py-1 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 hover:to-red-700 transition">Delete</button>
+                </div>
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+

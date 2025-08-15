@@ -1,0 +1,28 @@
+<div class=" bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-4 flex flex-col gap-3 items-center">
+  <!-- العنوان -->
+  <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">
+    الإعدادات ⚙️
+  </h2>
+
+ <div class="  w-full flex  justify-around items-center">
+  
+    <!-- زرار Translation -->
+  <button class=" cursor-pointer py-2 px-4 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-medium transition">
+    🌍 Translate
+  </button>
+
+  <!-- زرار Dark Mode -->
+  <button (click)="toogileMode()" class=" cursor-pointer py-2 px-4 rounded-xl bg-gray-700 hover:bg-gray-900 text-white font-medium transition">
+    🌙 Dark Mode
+  </button>
+
+
+    <!-- زرار تسجيل الخروج -->
+ @if (isLoggedIn$) {
+   <button (click)="logUot()" class=" cursor-pointer py-2 px-4 rounded-xl bg-red-500 hover:bg-red-600 text-white font-medium transition">
+    🚪 Logout
+  </button>
+ }
+ </div>
+</div>
+
