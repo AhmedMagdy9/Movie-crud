@@ -36,7 +36,12 @@ private alertService = inject(AlertService)
         this.authenService.updateLoginStatus(true);
         this.loginForm.reset({ email: '', password: '' });
       }else {
-        this.alertService.error('❌ البريد أو الباسورد غير صحيح');
+        const emailExists = storedUsers.some(u => u.email === formValues.email);
+          if (!emailExists) {
+        this.alertService.error('❌ ليس لديك حساب');
+      } else {
+        this.alertService.error('❌ كلمة المرور غير صحيحة');
+      }
       }
 
     }

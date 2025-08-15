@@ -24,19 +24,36 @@ export class RegisterComponent {
     });
   
 
-      register() {
-      if (this.registerForm.valid) {
-      const newUser: User = {
+     register() {
+  if (this.registerForm.valid) {
+    const newUser: User = {
       name: this.registerForm.value.name!,
       email: this.registerForm.value.email!,
       password: this.registerForm.value.password!,
-      };
-      this.authenService.users.update(users => [...users, newUser]);
-      localStorage.setItem('users', JSON.stringify(this.authenService.users()));
-      this.registerForm.reset();
-      this.alertService.success('تم التسجيل بنجاح ✅');
-      this.router.navigate(['/login']);
+    };
+
+    let users = this.authenService.users();
+    const userExists = users.some(user => user.email === newUser.email);
+
+    if (userExists) {
+      this.alertService.error('المستخدم موجود بالفعل ❌');
+      return;
     }
+
+    // تحديث الـ array محليًا
+    users = [...users, newUser];
+
+    // تحديث الـ service
+    this.authenService.users.update(() => users);
+
+    // حفظ في localStorage
+    localStorage.setItem('users', JSON.stringify(users));
+
+    this.registerForm.reset();
+    this.alertService.success('تم التسجيل بنجاح ✅');
+    this.router.navigate(['/login']);
   }
+}
+
 
 }
