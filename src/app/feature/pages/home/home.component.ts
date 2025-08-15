@@ -3,13 +3,14 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { AllMoviesService } from '../../../core/services/allMovies/all-movies.service';
 import { Movie } from '../../../shared/envairment/movie';
 import { AlertService } from '../../../core/services/alerts/alert.service';
+import { RouterLink } from '@angular/router';
 
 
 
 
 @Component({
   selector: 'app-home',
-  imports: [ReactiveFormsModule , FormsModule   ],
+  imports: [ReactiveFormsModule , FormsModule  ,RouterLink   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
@@ -18,6 +19,7 @@ showModal:WritableSignal<boolean> = signal(false)
 searchWord:WritableSignal<string> = signal('')
 UpdBtn:WritableSignal<boolean> = signal(false)
 allMoviesHome:WritableSignal<Movie[]>= signal([])
+selectImgName = signal<any | null>(null);
 selectedMovie = signal<Movie | null>(null);
 private allMoviesService = inject(AllMoviesService)
 private alertService = inject(AlertService)
@@ -52,11 +54,12 @@ private alertService = inject(AlertService)
       movieUrl: formValue.movieUrl!,
       type: formValue.type!,
       rating: +formValue.rating!,
-      watched: formValue.watched ?? false
+      watched:  false
     };
     this.allMoviesService.allMovies.update(movies => [...movies, newMovie]);
     this.allMoviesService.saveStorge()
    this.alertService.success('تم اضافة الفيلم بنجاح')
+    this.read()
     this.showModal.set(false)
     
     }
@@ -105,8 +108,24 @@ toggleModal(){
   this.selectedMovie.set(null);
   this.UpdBtn.set(false)
 }
+// عرض وغلق الصوره والاسم 
+openImg(movie:object){
+   this.selectImgName.set(movie) ;
+}
 
+closeImg(){
+  this.selectImgName.set(null) ;
+}
 
+// شاهدت الفيلم ام لا 
+markAsWatched(id: string) {
+  const movie = this.allMoviesHome().find(m => m.id === id);
+  if (movie) {
+    movie.watched = !movie.watched;
+     this.allMoviesService.saveStorge()
+
+  }
+}
 
 
 }
