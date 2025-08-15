@@ -1,6 +1,6 @@
 import { AuthenService } from './../../../core/services/auth/authen.service';
 import { Component, inject, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { User } from '../../../shared/envairment/users';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AlertService } from '../../../core/services/alerts/alert.service';
@@ -14,6 +14,7 @@ import { AlertService } from '../../../core/services/alerts/alert.service';
 export class RegisterComponent {
   private authenService = inject(AuthenService)
   private alertService = inject(AlertService)
+  private router = inject(Router)
 
 
   registerForm = new FormGroup({
@@ -34,6 +35,7 @@ export class RegisterComponent {
       localStorage.setItem('users', JSON.stringify(this.authenService.users()));
       this.registerForm.reset();
       this.alertService.success('تم التسجيل بنجاح ✅');
+      this.router.navigate(['/login']);
     }
   }
 
