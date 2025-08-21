@@ -39,7 +39,7 @@ private alertService = inject(AlertService)
     this.read()
   }
 
-  //  c   r  u   d
+  //                c   r  u   d                    //
 
 
 // create object
@@ -68,6 +68,7 @@ private alertService = inject(AlertService)
 // Display objects
   read(){
     this.allMoviesHome.set(this.allMoviesService.allMovies())
+    console.log(this.allMoviesHome())
   }
 // رفع البيانات الي ال form
   onEdit(movie: Movie) {

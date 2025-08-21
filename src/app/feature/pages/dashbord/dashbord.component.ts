@@ -15,14 +15,17 @@ export class DashbordComponent {
    allMoviesBord:WritableSignal<Movie[]>= signal(this.allMoviesService.allMovies())
 
 
-   
-
   totalMovies = computed(() => this.allMoviesBord().length);
   watchedMovies = computed(() => this.allMoviesBord().filter(m => m.watched).length);
   comedyMovies = computed(() => this.allMoviesBord().filter(m => m.type === 'Comedy').length);
   actionMovies = computed(() => this.allMoviesBord().filter(m => m.type === 'Action').length);
-  dramaMovies = computed(() => this.allMoviesBord().filter(m => m.type === 'drama').length);
+  dramaMovies = computed(() => this.allMoviesBord().filter(m => m.type === 'Drama').length);
   HorrorMovies = computed(() => this.allMoviesBord().filter(m => m.type === 'Horror').length);
   SciFiMovies = computed(() => this.allMoviesBord().filter(m => m.type === 'Sci-Fi').length);
+
+
+
+
+  
 
 }
